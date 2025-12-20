@@ -1,0 +1,23 @@
+<?php
+
+// Modèle de configuration BDD
+// Renommez ce fichier en "db.php" et mettez vos vrais infos
+$host = '******';   // À REMPLIR
+$db   = '******';  // À REMPLIR/ 
+$user = '******';      // À REMPLIR
+$pass = '******';          // À REMPLIR
+$charset = 'utf8mb4';
+
+$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+$options = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, // Indispensable pour voir les erreurs
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,       // Plus pratique que fetch_row
+    PDO::ATTR_EMULATE_PREPARES   => false,                  // Sécurité : force les vrais Prepared Statements
+];
+
+try {
+    $pdo = new PDO($dsn, $user, $pass, $options);
+    // echo "Connexion DB réussie !"; // Décommenter pour tester
+} catch (\PDOException $e) {
+    die("Erreur de connexion BDD : " . $e->getMessage()); // En prod, on ne montre pas le message !
+}

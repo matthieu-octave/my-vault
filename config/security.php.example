@@ -1,0 +1,6 @@
+<?php
+// Modèle de clé de sécurité
+// Renommez en "security.php" et générez votre propre clé
+// Commande : php -r "echo bin2hex(random_bytes(32));"
+
+define('APP_KEY_HEX', 'METTRE_VOTRE_CLE_ICI_32_OCTETS_HEX');

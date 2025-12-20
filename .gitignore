@@ -1,0 +1,26 @@
+# --- SÉCURITÉ (CRITIQUE) ---
+# Ne jamais commiter les identifiants de base de données
+config/db.php
+
+# Ne jamais commiter la clé de chiffrement AES
+config/security.php
+config/key.php
+
+# Si vous utilisez des variables d'environnement
+.env
+
+# --- SYSTÈME ---
+.DS_Store
+Thumbs.db
+
+# --- IDE (Éditeurs de code) ---
+# Configurations locales de VS Code ou PhpStorm
+.vscode/
+.idea/
+
+# --- DÉPENDANCES (Si un jour vous utilisez Composer) ---
+vendor/
+
+# --- LOGS ---
+error.log
+access.log
