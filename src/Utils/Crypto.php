@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Utils;
+
 class Crypto {
     // On utilise AES-256 en mode GCM (Galois/Counter Mode).
     // C'est le standard actuel : il assure confidentialité ET intégrité.
