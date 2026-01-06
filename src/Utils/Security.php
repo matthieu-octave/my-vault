@@ -52,4 +52,17 @@ class Security {
         session_unset();
         session_destroy();
     }
+
+    /**
+ * Génère (ou récupère) un jeton CSRF pour la session en cours
+ */
+public static function getCsrfToken(): string {
+    self::safeSessionStart(); // On s'assure que la session est démarrée
+
+    if (empty($_SESSION['csrf_token'])) {
+        // Génération d'un jeton aléatoire sécurisé de 32 octets (64 caractères hex)
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+}
 }

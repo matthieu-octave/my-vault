@@ -24,6 +24,7 @@
                         <?php endif; ?>
 
                         <form method="POST" action="">
+                            <input type="hidden" name="csrf_token" value="<?= \App\Utils\Security::getCsrfToken() ?>">
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
                                 <input type="email" class="form-control" name="email" required autofocus>

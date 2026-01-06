@@ -46,4 +46,26 @@ class User {
         // Retourne un tableau associatif ou false si non trouvé
         return $stmt->fetch();
     }
+
+    /**
+ * Met à jour le mot de passe hashé d'un utilisateur
+ */
+public function updatePassword(int $userId, string $newHash): bool {
+    $sql = "UPDATE users SET password_hash = :hash WHERE id = :id";
+    $stmt = $this->pdo->prepare($sql);
+    return $stmt->execute([
+        ':hash' => $newHash,
+        ':id'   => $userId
+    ]);
+}
+
+/**
+ * Trouve un utilisateur par son ID (Nécessaire pour vérifier l'ancien mot de passe)
+ */
+public function findById(int $id) {
+    $sql = "SELECT * FROM users WHERE id = :id";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute([':id' => $id]);
+    return $stmt->fetch();
+}
 }

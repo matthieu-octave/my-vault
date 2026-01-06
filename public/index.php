@@ -29,18 +29,22 @@ try {
         // Routes AUTH
         str_ends_with($uri, '/register') => (new AuthController())->register(),
         str_ends_with($uri, '/login')    => (new AuthController())->login(),
-        
+
         // Routes DASHBOARD
         str_ends_with($uri, '/dashboard') => (new DashboardController())->index(),
         str_ends_with($uri, '/logout')    => (new DashboardController())->logout(),
-        
+        str_ends_with($uri, '/delete') => (new DashboardController())->delete(),
+        str_ends_with($uri, '/edit')   => (new DashboardController())->edit(),
+
+        // Route PROFILE
+        str_ends_with($uri, '/profile') => (new AuthController())->profile(),
+
         // Route RACINE (Redirection)
         str_ends_with($uri, '/') || str_ends_with($uri, '/index.php') => header('Location: register') && exit,
-        
+
         // Route PAR DÉFAUT (404)
         default => throw new Exception("Page non trouvée"),
     };
-
 } catch (Exception $e) {
     // Gestion centralisée des erreurs 404
     http_response_code(404);
