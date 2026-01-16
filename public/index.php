@@ -8,9 +8,10 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use Dotenv\Dotenv;
 
 // --- CHARGEMENT DES VARIABLES D'ENVIRONNEMENT ---
-$dotenv = Dotenv::createImmutable(__DIR__ . '/..');
-// safeLoad() ne plante pas si le fichier manque, il ne fait rien.
-$dotenv->safeLoad();
+if (file_exists(__DIR__ . '/../.env')) {
+    $dotenv = Dotenv::createImmutable(__DIR__ . '/..');
+    $dotenv->load();
+}
 
 // On charge les fichiers de configuration (qui ne sont pas des classes)
 require_once __DIR__ . '/../config/db.php';
@@ -73,9 +74,10 @@ try {
         // Route PAR DÉFAUT (404)
         default => throw new Exception("Page non trouvée"),
     };
-} catch (Exception $e) {
-    // Gestion centralisée des erreurs 404
-    http_response_code(404);
-    echo "<h1>404 - Page non trouvée</h1>";
-    echo "<p>Le chemin '{$uri}' n'existe pas.</p>";
+} catch (Throwable $e) { // Utilisez 'Throwable' pour tout attraper (Erreurs et Exceptions)
+    echo "<h1>Erreur Critique !</h1>";
+    echo "<p><strong>Message :</strong> " . $e->getMessage() . "</p>";
+    echo "<p><strong>Fichier :</strong> " . $e->getFile() . "</p>";
+    echo "<p><strong>Ligne :</strong> " . $e->getLine() . "</p>";
+    exit;
 }

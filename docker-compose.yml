@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: mysql:8.0
@@ -12,7 +10,7 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql
-
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
   www:
     build: .
     container_name: myvault_web
