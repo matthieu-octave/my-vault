@@ -37,13 +37,10 @@ class Secret {
         ]);
     }
 
-    /**
-     * Récupère un secret spécifique (Vérifie qu'il appartient bien à l'utilisateur !)
-     */
-    public function getOne(int $id, int $userId) {
-        $sql = "SELECT * FROM secrets WHERE id = :id AND user_id = :user_id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':id' => $id, ':user_id' => $userId]);
+    // Pour récupérer un secret précis (avant déchiffrement)
+    public function getOne(int $id) {
+        $stmt = $this->pdo->prepare("SELECT * FROM secrets WHERE id = :id LIMIT 1");
+        $stmt->execute(['id' => $id]);
         return $stmt->fetch();
     }
 

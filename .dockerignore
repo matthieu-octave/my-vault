@@ -1,0 +1,6 @@
+.git
+vendor
+tests
+.idea
+.vscode
+.env

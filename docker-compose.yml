@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: myvault_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}  # <--- Magie !
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+
+  www:
+    build: .
+    container_name: myvault_web
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    environment:
+      # On transmet les variables du .env vers PHP
+      DB_HOST: db
+      DB_NAME: ${DB_DATABASE}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASSWORD}
+      APP_KEY_HEX: ${APP_KEY_HEX}               # <--- On passe la clé secrète
+
+volumes:
+  db_data:

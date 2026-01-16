@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\User;
 use App\Utils\Security;
+use App\Utils\PasswordValidator;
 
 class AuthController
 {
@@ -25,27 +26,27 @@ class AuthController
             $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
             $password = $_POST['password'] ?? '';
 
-            if ($email && !empty($password)) {
+            if (!$email || empty($password)) {
+                $error = "Veuillez remplir tous les champs.";
+            } 
+            // 2. On utilise notre validateur TDD pour la force du mot de passe
+            elseif (!PasswordValidator::validate($password)) {
+                $error = "Le mot de passe est trop faible (min 8 caractères et 1 chiffre).";
+            }
+            else {
                 $userModel = new User();
 
-                // 1. Vérifier si l'email existe déjà
+                // 3. Le reste de la logique reste identique (Vérif email + Hash + Création)
                 if ($userModel->findByEmail($email)) {
                     $error = "Cet email est déjà utilisé.";
                 } else {
-                    // 2. Hachage du mot de passe
                     $hash = password_hash($password, PASSWORD_DEFAULT);
-
-                    // 3. Création via le Modèle
                     if ($userModel->create($email, $hash)) {
                         $success = "Compte créé avec succès !";
-                        // Optionnel : Redirection vers le login
-                        // header('Location: /login'); exit;
                     } else {
                         $error = "Erreur lors de la création du compte.";
                     }
                 }
-            } else {
-                $error = "Veuillez remplir tous les champs.";
             }
         }
 
@@ -133,8 +134,8 @@ class AuthController
                     $error = "L'ancien mot de passe est incorrect.";
                 } elseif ($newPwd !== $confPwd) {
                     $error = "Les nouveaux mots de passe ne correspondent pas.";
-                } elseif (strlen($newPwd) < 8) {
-                    $error = "Le nouveau mot de passe est trop court.";
+                } elseif (!PasswordValidator::validate($newPwd)) {
+                    $error = "Le nouveau mot de passe est trop faible (min 8 car. + 1 chiffre).";
                 } else {
                     // C. Tout est bon : On hache et on sauvegarde
                     $newHash = password_hash($newPwd, PASSWORD_DEFAULT);
